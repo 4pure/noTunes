@@ -29,7 +29,11 @@ brew install --cask notunes
 
 ### Set noTunes to launch at startup
 
-#### Ventura and later:
+Right click or control-click the menu bar icon and enable `Launch at Login`.
+
+If the system asks for approval, confirm noTunes in **System Settings → General → Login Items**.
+
+#### Manual setup (Ventura and later):
 
 1. Navigate to System Settings
 2. Select General

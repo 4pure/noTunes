@@ -17,6 +17,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     let statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
 
     @IBOutlet weak var statusMenu: NSMenu!
+    @IBOutlet weak var launchAtLoginMenuItem: NSMenuItem!
 
     @IBAction func hideIconClicked(_ sender: NSMenuItem) {
         defaults.set(true, forKey: "hideIcon")
@@ -28,11 +29,36 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         NSApplication.shared.terminate(self)
     }
 
+    @IBAction func launchAtLoginClicked(_ sender: NSMenuItem) {
+        guard #available(macOS 13.0, *) else { return }
+
+        do {
+            if SMAppService.mainApp.status == .enabled {
+                try SMAppService.mainApp.unregister()
+            } else {
+                try SMAppService.mainApp.register()
+            }
+        } catch {
+            let alert = NSAlert()
+            alert.alertStyle = .warning
+            alert.messageText = "Couldn’t update Launch at Login"
+            alert.informativeText = error.localizedDescription
+            alert.runModal()
+        }
+
+        refreshLaunchAtLoginMenuItem()
+
+        if SMAppService.mainApp.status == .requiresApproval {
+            SMAppService.openSystemSettingsLoginItems()
+        }
+    }
+
     @objc func statusBarButtonClicked(sender: NSStatusBarButton) {
         let event = NSApp.currentEvent!
 
         if event.type == NSEvent.EventType.rightMouseUp ||
            (event.type == NSEvent.EventType.leftMouseUp && event.modifierFlags.contains(NSEvent.ModifierFlags.control)) {
+            refreshLaunchAtLoginMenuItem()
             statusItem.menu = statusMenu
             if let menu = statusItem.menu {
                 menu.popUp(positioning: menu.items.first, at: NSEvent.mouseLocation, in: nil)
@@ -62,6 +88,16 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
         self.appIsLaunched()
         self.createListener()
+        refreshLaunchAtLoginMenuItem()
+    }
+
+    func refreshLaunchAtLoginMenuItem() {
+        if #available(macOS 13.0, *) {
+            launchAtLoginMenuItem.isHidden = false
+            launchAtLoginMenuItem.state = SMAppService.mainApp.status == .enabled ? .on : .off
+        } else {
+            launchAtLoginMenuItem.isHidden = true
+        }
     }
 
     func createListener() {
@@ -101,19 +137,14 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     func launchReplacement() {
-        let replacement = defaults.string(forKey: "replacement");
-        if (replacement != nil) {
-            let task = Process()
-
-            task.arguments = [replacement!];
-            task.launchPath = "/usr/bin/open"
-            task.launch()
+        guard let replacement = defaults.string(forKey: "replacement"), !replacement.isEmpty else {
+            return
         }
-    }
 
-    func terminateProcessWith(_ processId:Int,_ processName:String) {
-        let process = NSRunningApplication.init(processIdentifier: pid_t(processId))
-        process?.forceTerminate()
+        let task = Process()
+        task.executableURL = URL(fileURLWithPath: "/usr/bin/open")
+        task.arguments = [replacement]
+        try? task.run()
     }
 
 }
