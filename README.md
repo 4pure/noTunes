@@ -106,6 +106,13 @@ The following command will disable the replacement.
 defaults delete digital.twisted.noTunes replacement
 ```
 
+## Build a DMG
+
+```bash
+./scripts/package-dmg.sh
+# Output: dist/noTunes-<MARKETING_VERSION>.dmg
+```
+
 ## Support
 
 If you like my work, consider supporting me through [GitHub Sponsors](https://github.com/sponsors/tombonez) 🩷
