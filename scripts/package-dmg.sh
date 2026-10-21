@@ -34,6 +34,21 @@ case "$REQUESTED" in
     ;;
 esac
 
+section() {
+  echo
+  echo "======== $* ========"
+  echo
+}
+
+print_build_result() {
+  local out_dir="$1"
+  local artifact="$2"
+  echo
+  echo "产物目录：${out_dir}"
+  echo "可执行文件：${artifact}"
+  echo
+}
+
 archs_for_label() {
   case "$1" in
     arm) echo "arm64" ;;
@@ -56,9 +71,15 @@ package_one() {
   archs="$(archs_for_label "$label")"
   local derived="build/ReleaseDerivedData-${label}"
   local stage="dist/staging-${label}"
+  local STEPS=2
+  local STEP=0
 
-  echo "==> Packaging ${APP_NAME} ${VERSION} (${BUILD}) [${label}: ${archs}]"
+  next_section() {
+    STEP=$((STEP + 1))
+    section "[$STEP/$STEPS] $*"
+  }
 
+  next_section "xcodebuild Release ${label}"
   rm -rf "$derived" "$stage"
 
   xcodebuild \
@@ -85,8 +106,8 @@ package_one() {
     echo "error: expected arches [$expected], got [$actual]" >&2
     exit 1
   fi
-  echo "    binary arches: $actual"
 
+  next_section "create dmg ${label}"
   mkdir -p "$stage"
   ditto "$app" "$stage/${APP_NAME}.app"
   ln -sf /Applications "$stage/Applications"
@@ -100,11 +121,17 @@ package_one() {
     "$ROOT/$dmg_path"
 
   rm -rf "$stage"
-  ls -lh "$dmg_path"
-  echo "Done: ${ROOT}/${dmg_path}"
+
+  local artifact="$ROOT/$dmg_path"
+  if [[ ! -f "$artifact" ]]; then
+    echo "DMG not found: $artifact" >&2
+    exit 1
+  fi
+  print_build_result "$ROOT/dist" "$artifact"
 }
 
 mkdir -p dist
-rm -f dist/${APP_NAME}-*-arm64.dmg dist/${APP_NAME}-*-x86_64.dmg dist/${APP_NAME}-*.zip
+# Drop legacy arch suffixes from earlier script versions
+rm -f dist/${APP_NAME}-*-arm64.dmg dist/${APP_NAME}-*-x86_64.dmg
 
 package_one "$REQUESTED"
