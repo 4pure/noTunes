@@ -1,0 +1,3 @@
+// 营销版本与构建号只改这一处；Debug / Release 共用。
+MARKETING_VERSION = 3.5
+CURRENT_PROJECT_VERSION = 1

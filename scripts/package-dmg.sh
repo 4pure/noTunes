@@ -6,20 +6,45 @@ cd "$ROOT"
 
 SCHEME="noTunes"
 APP_NAME="noTunes"
-PBXPROJ="noTunes.xcodeproj/project.pbxproj"
 
-VERSION=$(python3 - <<PY
-import re, pathlib
-text = pathlib.Path("$PBXPROJ").read_text()
-m = re.search(r"MARKETING_VERSION = ([^;]+);", text)
-print(m.group(1).strip().strip('"') if m else "0.0")
+VERSION=$(
+  PKG_ROOT="$ROOT" python3 - <<'PY'
+from pathlib import Path
+import os, re, sys
+
+root = Path(os.environ["PKG_ROOT"])
+cfg = root / "Config" / "Version.xcconfig"
+if cfg.is_file():
+    m = re.search(r"^MARKETING_VERSION\s*=\s*(\S+)", cfg.read_text(), re.M)
+    if m:
+        print(m.group(1).strip())
+        sys.exit(0)
+for pbx in root.glob("*.xcodeproj/project.pbxproj"):
+    m = re.search(r"MARKETING_VERSION\s*=\s*([^;]+);", pbx.read_text())
+    if m:
+        print(m.group(1).strip().strip('"'))
+        sys.exit(0)
+sys.exit("error: MARKETING_VERSION not found in Config/Version.xcconfig or project.pbxproj")
 PY
 )
-BUILD=$(python3 - <<PY
-import re, pathlib
-text = pathlib.Path("$PBXPROJ").read_text()
-m = re.search(r"CURRENT_PROJECT_VERSION = ([^;]+);", text)
-print(m.group(1).strip().strip('"') if m else "0")
+BUILD=$(
+  PKG_ROOT="$ROOT" python3 - <<'PY'
+from pathlib import Path
+import os, re, sys
+
+root = Path(os.environ["PKG_ROOT"])
+cfg = root / "Config" / "Version.xcconfig"
+if cfg.is_file():
+    m = re.search(r"^CURRENT_PROJECT_VERSION\s*=\s*(\S+)", cfg.read_text(), re.M)
+    if m:
+        print(m.group(1).strip())
+        sys.exit(0)
+for pbx in root.glob("*.xcodeproj/project.pbxproj"):
+    m = re.search(r"CURRENT_PROJECT_VERSION\s*=\s*([^;]+);", pbx.read_text())
+    if m:
+        print(m.group(1).strip().strip('"'))
+        sys.exit(0)
+print("1")
 PY
 )
 
