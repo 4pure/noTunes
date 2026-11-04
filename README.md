@@ -111,9 +111,9 @@ defaults delete digital.twisted.noTunes replacement
 Defaults to Universal; pass `arm` or `intel` for a single-architecture DMG:
 
 ```bash
-./scripts/package-dmg.sh            # dist/noTunes-<VERSION>-universal.dmg
-./scripts/package-dmg.sh arm        # dist/noTunes-<VERSION>-arm.dmg
-./scripts/package-dmg.sh intel      # dist/noTunes-<VERSION>-intel.dmg
+./scripts/package-dmg.sh            # installers/noTunes-<VERSION>-universal.dmg
+./scripts/package-dmg.sh arm        # installers/noTunes-<VERSION>-arm.dmg
+./scripts/package-dmg.sh intel      # installers/noTunes-<VERSION>-intel.dmg
 ```
 
 ## Support

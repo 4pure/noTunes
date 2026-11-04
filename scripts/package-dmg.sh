@@ -95,7 +95,7 @@ package_one() {
   local archs
   archs="$(archs_for_label "$label")"
   local derived="build/ReleaseDerivedData-${label}"
-  local stage="dist/staging-${label}"
+  local stage="build/dmg-staging-${label}"
   local STEPS=2
   local STEP=0
 
@@ -137,7 +137,7 @@ package_one() {
   ditto "$app" "$stage/${APP_NAME}.app"
   ln -sf /Applications "$stage/Applications"
 
-  local dmg_path="dist/${APP_NAME}-${VERSION}-${label}.dmg"
+  local dmg_path="installers/${APP_NAME}-${VERSION}-${label}.dmg"
   rm -f "$dmg_path"
   diskutil image create from \
     --format UDZO \
@@ -152,11 +152,11 @@ package_one() {
     echo "DMG not found: $artifact" >&2
     exit 1
   fi
-  print_build_result "$ROOT/dist" "$artifact"
+  print_build_result "$ROOT/installers" "$artifact"
 }
 
-mkdir -p dist
+mkdir -p installers
 # Drop legacy arch suffixes from earlier script versions
-rm -f dist/${APP_NAME}-*-arm64.dmg dist/${APP_NAME}-*-x86_64.dmg
+rm -f installers/${APP_NAME}-*-arm64.dmg installers/${APP_NAME}-*-x86_64.dmg
 
 package_one "$REQUESTED"
