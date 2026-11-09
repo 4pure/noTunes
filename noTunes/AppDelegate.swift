@@ -41,7 +41,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         } catch {
             let alert = NSAlert()
             alert.alertStyle = .warning
-            alert.messageText = "Couldn’t update Launch at Login"
+            alert.messageText = "无法更新「登录时启动」"
             alert.informativeText = error.localizedDescription
             alert.runModal()
         }

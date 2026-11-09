@@ -21,20 +21,20 @@
         <customObject id="YLy-65-1bz" customClass="NSFontManager"/>
         <menu id="WAR-Dm-F96">
             <items>
-                <menuItem title="Launch at Login" id="LaL-1A-9k2">
+                <menuItem title="登录时启动" id="LaL-1A-9k2">
                     <modifierMask key="keyEquivalentModifierMask"/>
                     <connections>
                         <action selector="launchAtLoginClicked:" target="Voe-Tx-rLC" id="LaL-ac-001"/>
                     </connections>
                 </menuItem>
-                <menuItem title="Hide Icon" id="BOM-2J-34i">
+                <menuItem title="隐藏图标" id="BOM-2J-34i">
                     <modifierMask key="keyEquivalentModifierMask"/>
                     <connections>
                         <action selector="hideIconClicked:" target="Voe-Tx-rLC" id="Oux-kD-7eE"/>
                     </connections>
                 </menuItem>
                 <menuItem isSeparatorItem="YES" id="cqO-gs-dU5"/>
-                <menuItem title="Quit" id="tKr-kb-ZPz">
+                <menuItem title="退出" id="tKr-kb-ZPz">
                     <modifierMask key="keyEquivalentModifierMask"/>
                     <connections>
                         <action selector="quitClicked:" target="Voe-Tx-rLC" id="AAm-v2-v1x"/>

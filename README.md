@@ -7,15 +7,15 @@
 
 # noTunes
 
-noTunes is a macOS application that will prevent iTunes _or_ Apple Music from launching.
+noTunes 是一款 macOS 应用，用于阻止 iTunes 或 Apple Music 启动。
 
-Simply launch the noTunes app and iTunes/Music will no longer be able to launch. For example, when bluetooth headphones reconnect.
+启动 noTunes 后，iTunes / Music 将无法打开。例如蓝牙耳机重新连接时就不会再弹出 Music。
 
-You can toggle the apps functionality via the menu bar icon with a simple left click.
+左键点击菜单栏图标即可开关此功能。
 
-## Installation
+## 安装
 
-### Direct Download
+### 直接下载
 
 [noTunes-3.5.zip](https://github.com/tombonez/noTunes/releases/download/v3.5/noTunes-3.5.zip)
 
@@ -25,90 +25,90 @@ You can toggle the apps functionality via the menu bar icon with a simple left c
 brew install --cask notunes
 ```
 
-## Usage
+## 使用说明
 
-### Set noTunes to launch at startup
+### 设置开机启动
 
-Right click or control-click the menu bar icon and enable `Launch at Login`.
+右键或 Control + 点击菜单栏图标，勾选「登录时启动」。
 
-If the system asks for approval, confirm noTunes in **System Settings → General → Login Items**.
+若系统要求授权，请在 **系统设置 → 通用 → 登录项** 中确认允许 noTunes。
 
-#### Manual setup (Ventura and later):
+#### 手动设置（Ventura 及更新版本）：
 
-1. Navigate to System Settings
-2. Select General
-3. Select Login Items
-4. Click the + under Open at Login and select noTunes
+1. 打开「系统设置」
+2. 选择「通用」
+3. 选择「登录项」
+4. 在「登录时打开」下方点击 +，选择 noTunes
 
-#### Before Ventura:
+#### Ventura 之前：
 
-Navigate to System Preferences -> Users & Groups. Under your user, select "Login Items", click the lock on the bottom left and enter your login password to make changes. Click the plus sign (+) in the main panel and search for noTunes. Select it and click "Add".
+打开「系统偏好设置」→「用户与群组」。在当前用户下选择「登录项」，点击左下角锁图标并输入密码以允许更改。在主面板点击 +，找到并添加 noTunes。
 
-### Toggle noTunes Functionality
+### 开关 noTunes 功能
 
-Left click the menu bar icon to toggle between its active states.
+左键点击菜单栏图标，可在启用 / 停用状态间切换。
 
-**Enabled (prevents iTunes/Music from opening)**
+**启用（阻止 iTunes / Music 打开）**
 
 ![noTunes Enabled](/screenshots/menubar-enabled.png)
 
-**Disabled (allows iTunes/Music to open)**
+**停用（允许 iTunes / Music 打开）**
 
 ![noTunes Disabled](/screenshots/menubar-disabled.png)
 
-### Hide Menu Bar Icon
+### 隐藏菜单栏图标
 
-Right click or control-click the menu bar icon and click `Hide Icon`.
+右键或 Control + 点击菜单栏图标，选择「隐藏图标」。
 
-### Restore Menu Bar Icon
+### 恢复菜单栏图标
 
-[Quit noTunes](#quit-notunes), run the following command in Terminal and re-open the app:
+[退出 noTunes](#退出-notunes) 后，在终端执行以下命令，再重新打开应用：
 
 ```bash
 defaults delete digital.twisted.noTunes
 ```
 
-### Quit noTunes
+### 退出 noTunes
 
-To quit the app either:
+可通过以下方式退出：
 
-**With menu bar icon visible**
+**菜单栏图标可见时**
 
-Right click or control-click the menu bar icon and click quit.
+右键或 Control + 点击菜单栏图标，选择「退出」。
 
-**With menu bar icon hidden**
+**菜单栏图标已隐藏时**
 
-Quit the app via Activity Monitor or run the following command in Terminal:
+在「活动监视器」中退出，或在终端执行：
 
 ```bash
 osascript -e 'quit app "noTunes"'
 ```
 
-### Set replacement for iTunes / Apple Music
+### 设置 iTunes / Apple Music 的替代应用
 
-Replace `YOUR_MUSIC_APP` with the name of your music app in the following command.
+将下面命令中的 `YOUR_MUSIC_APP` 替换为你的音乐应用名称：
 
 ```bash
 defaults write digital.twisted.noTunes replacement /Applications/YOUR_MUSIC_APP.app
 ```
 
-Then `/Applications/YOUR_MUSIC_APP.app` will launch when iTunes/Music attempts to launch.
+之后当 iTunes / Music 试图启动时，会改为打开 `/Applications/YOUR_MUSIC_APP.app`。
 
-This can be used to open a website too, for example, YouTube Music.
+也可以用来打开网站，例如 YouTube Music：
 
 ```bash
 defaults write digital.twisted.noTunes replacement https://music.youtube.com/
 ```
 
-The following command will disable the replacement.
+取消替代应用：
 
 ```bash
 defaults delete digital.twisted.noTunes replacement
 ```
 
-## Build a DMG
+## 打包 DMG
 
-Defaults to Universal; pass `arm` or `intel` for a single-architecture DMG:
+默认打 Universal；传入 `arm` 或 `intel` 可打单架构 DMG：
 
 ```bash
 ./scripts/package-dmg.sh            # installers/noTunes-<VERSION>-universal.dmg
@@ -116,10 +116,10 @@ Defaults to Universal; pass `arm` or `intel` for a single-architecture DMG:
 ./scripts/package-dmg.sh intel      # installers/noTunes-<VERSION>-intel.dmg
 ```
 
-## Support
+## 支持
 
-If you like my work, consider supporting me through [GitHub Sponsors](https://github.com/sponsors/tombonez) 🩷
+如果喜欢这个项目，可以通过 [GitHub Sponsors](https://github.com/sponsors/tombonez) 支持原作者 🩷
 
-## License
+## 许可证
 
-The code is available under the [MIT License](https://github.com/tombonez/notunes/blob/master/LICENSE).
+代码基于 [MIT License](https://github.com/tombonez/notunes/blob/master/LICENSE) 开源。
