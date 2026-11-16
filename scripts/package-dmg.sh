@@ -48,16 +48,21 @@ print("1")
 PY
 )
 
-# Usage: ./scripts/package-dmg.sh [universal|arm|intel]
-# Default: universal
-REQUESTED="${1:-universal}"
-case "$REQUESTED" in
-  universal|arm|intel) ;;
-  *)
-    echo "Usage: $0 [universal|arm|intel]" >&2
-    exit 1
-    ;;
-esac
+# Usage: ./scripts/package-dmg.sh [universal|arm|intel] [--app-only]
+# Default: universal（只打 DMG 到 installers/）
+# --app-only：只发布 .app 到 installers/，不打 DMG
+APP_ONLY=0
+REQUESTED="universal"
+for arg in "$@"; do
+  case "$arg" in
+    --app-only) APP_ONLY=1 ;;
+    universal|arm|intel) REQUESTED="$arg" ;;
+    *)
+      echo "Usage: $0 [universal|arm|intel] [--app-only]" >&2
+      exit 1
+      ;;
+  esac
+done
 
 section() {
   echo
@@ -97,6 +102,9 @@ package_one() {
   local derived="build/ReleaseDerivedData-${label}"
   local stage="build/dmg-staging-${label}"
   local STEPS=2
+  if [[ "${APP_ONLY:-0}" -eq 1 ]]; then
+    STEPS=1
+  fi
   local STEP=0
 
   next_section() {
@@ -130,6 +138,15 @@ package_one() {
   if [[ "$actual" != "$expected" ]]; then
     echo "error: expected arches [$expected], got [$actual]" >&2
     exit 1
+  fi
+
+  mkdir -p installers
+
+  if [[ "${APP_ONLY:-0}" -eq 1 ]]; then
+    rm -rf "installers/${APP_NAME}.app"
+    ditto "$app" "installers/${APP_NAME}.app"
+    print_build_result "$ROOT/installers" "$ROOT/installers/${APP_NAME}.app"
+    return
   fi
 
   next_section "create dmg ${label}"

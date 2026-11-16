@@ -1,4 +1,4 @@
-.PHONY: build-mac build-mac-arm build-mac-intel version-bump
+.PHONY: build-mac build-mac-arm build-mac-intel build-mac-app build-mac-arm-app build-mac-intel-app version-bump
 
 build-mac:
 	bash scripts/package-dmg.sh universal
@@ -8,6 +8,15 @@ build-mac-arm:
 
 build-mac-intel:
 	bash scripts/package-dmg.sh intel
+
+build-mac-app:
+	bash scripts/package-dmg.sh universal --app-only
+
+build-mac-arm-app:
+	bash scripts/package-dmg.sh arm --app-only
+
+build-mac-intel-app:
+	bash scripts/package-dmg.sh intel --app-only
 
 version-bump:
 	bash scripts/bump-version.sh
