@@ -111,9 +111,9 @@ defaults delete digital.twisted.noTunes replacement
 默认打 Universal；传入 `arm` 或 `intel` 可打单架构 DMG：
 
 ```bash
-./scripts/package-dmg.sh            # installers/noTunes-<VERSION>-universal.dmg
-./scripts/package-dmg.sh arm        # installers/noTunes-<VERSION>-arm.dmg
-./scripts/package-dmg.sh intel      # installers/noTunes-<VERSION>-intel.dmg
+./scripts/package.sh            # installers/noTunes-<VERSION>-universal.dmg
+./scripts/package.sh arm        # installers/noTunes-<VERSION>-arm.dmg
+./scripts/package.sh intel      # installers/noTunes-<VERSION>-intel.dmg
 ```
 
 ## 支持

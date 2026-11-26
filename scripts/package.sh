@@ -48,7 +48,7 @@ print("1")
 PY
 )
 
-# Usage: ./scripts/package-dmg.sh [universal|arm|intel] [--app-only]
+# Usage: ./scripts/package.sh [universal|arm|intel] [--app-only]
 # Default: universal（只打 DMG 到 installers/）
 # --app-only：只发布 .app 到 installers/，不打 DMG
 APP_ONLY=0
